@@ -9,7 +9,7 @@ import (
 
 func main() {
 	if len(os.Args) < 3 {
-		useFile := flag.String("file", "", "-file=[filename] - file using for open discriptor")
+		useFile := flag.String("file", "", "-file=[filename] - file using for open descriptor")
 		flag.Parse()
 		biroot.ReadArgs(*useFile)
 	} else {
