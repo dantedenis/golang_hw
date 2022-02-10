@@ -39,6 +39,7 @@ func readFile(filename string) {
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println("\u001B[31mError open file: " + err.Error() + "[0m")
+		return
 	} else {
 		fmt.Println("\u001B[3;32mSuccess open file: " + filename + "[0m")
 	}
