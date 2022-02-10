@@ -27,6 +27,7 @@ func analyze(a, b, c float64) {
 }
 
 func calculate(a, b, c float64) (x1, x2 complex128) {
+	fmt.Printf("Your equation: \u001B[1;33;44m(%.3f * x²) + (%.3f * x) + (%.3f) = 0\033[0m \n", a, b, c)
 	analyze(a, b, c)
 	D := discriminate(a, b, c)
 	x1 = (complex(-b, 0) + cmplx.Sqrt(D)) / complex(2*a, 0)
@@ -34,30 +35,27 @@ func calculate(a, b, c float64) (x1, x2 complex128) {
 	return
 }
 
-func readFile(filename string) (*complex128, *complex128, error) {
+func readFile(filename string) {
 	file, err := os.Open(filename)
 	if err != nil {
-		fmt.Println("Error open file: " + err.Error())
-		return nil, nil, err
+		fmt.Println("\u001B[31mError open file: " + err.Error() + "[0m")
 	} else {
-		fmt.Println("Success open file: " + filename)
+		fmt.Println("\u001B[3;32mSuccess open file: " + filename + "[0m")
 	}
 	defer file.Close()
 	var coefs [3]float64
 	for i := 0; i < 3; i++ {
 		_, err := fmt.Fscanf(file, "%f", &coefs[i])
 		if err != nil {
-			fmt.Println("Error parse file: " + err.Error())
-			return nil, nil, err
+			fmt.Println("\u001B[31mError parse file: " + err.Error() + "[0m")
+			return
 		}
 	}
-	//fmt.Printf("Your equation: %3f*x^2 + (%3f) + (%3f) = 0", coefs[0], coefs[1], coefs[2])
-	var x1, x2 *complex128
-	*x1, *x2 = calculate(coefs[0], coefs[1], coefs[2])
-	return x1, x2, nil
+	x1, x2 := calculate(coefs[0], coefs[1], coefs[2])
+	fmt.Printf("\u001B[32mx1 = %f\nx2 = %f\n\u001B[0m", x1, x2)
 }
 
-func ReadArgs(str string) (x1, x2 *complex128, err error) {
+func ReadArgs(str string) {
 
 	var a, b, c float64
 
@@ -65,12 +63,12 @@ func ReadArgs(str string) (x1, x2 *complex128, err error) {
 		fmt.Printf("Enter the coefficients a,b,c: ")
 		_, err := fmt.Scan(&a, &b, &c)
 		if err != nil {
-			fmt.Println("Error scan args")
+			fmt.Println("\u001B[31mError scan args" + "[0m")
 			os.Exit(1)
 		}
-		fmt.Println(calculate(a, b, c))
+		x1, x2 := calculate(a, b, c)
+		fmt.Printf("\u001B[32mx1 = %f\nx2 = %f\n\u001B[0m", x1, x2)
 	} else {
-		x1, x2, err = readFile(str)
+		readFile(str)
 	}
-	return x1, x2, err
 }
