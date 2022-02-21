@@ -12,7 +12,9 @@ func main() {
 	//fmt.Println(pointer1.Distance(struct{ x, y float64 }{3, 5}))
 	//fmt.Printf("%10f\n", pointer2.Distance(*pointer3))
 	//fmt.Printf("%10f\n", pointer2.Distance(struct{ lat, lng float64 }{45.12, 67.543}))
-	dCoord := maps.NewArc(*pointer2, *pointer3)
-	fmt.Println(dCoord)
-	fmt.Printf("%T\n%T", pointer3, dCoord)
+	dCoords := maps.NewArc(*pointer2, *pointer3)
+	Path := dCoords.AddPoint(*maps.NewPointDeg(13.121, 466.112), *maps.NewPointRad(1231.11, 63.21))
+	fmt.Println(dCoords)
+	fmt.Printf("%T\n%T", pointer3, dCoords)
+	fmt.Println(Path)
 }
