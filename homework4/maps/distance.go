@@ -1,3 +1,13 @@
+/*
+
+func (a Arc) AddPoint(points Arc) (*ArcSlice){
+    var result ArcSlice
+    result.arcs = make([]Arc, 0, 10)
+    result.arcs = append(result.arcs, a)
+    return &result
+}*/
+
+
 package maps
 
 type Arc struct {
