@@ -1,9 +1,14 @@
 package maps
 
-import "math"
+import (
+	"errors"
+	"math"
+	"strconv"
+)
 
 const (
-	oneRadian   Degree  = math.Pi / 180
+	degToRad    Degree  = math.Pi / 180
+	radToDeg    Radian  = 180 / math.Pi
 	radiusEarth float64 = 6372795
 )
 
@@ -23,8 +28,20 @@ func NewPointRad(latitude, longitude Radian) *PointPlanet {
 	return &PointPlanet{lat: latitude, lng: longitude}
 }
 
+func NewPoint(latDeg, lngDeg string) (*PointPlanet, error) {
+	lat, err := strconv.ParseFloat(latDeg, 64)
+	if err != nil {
+		return nil, errors.New("parse float")
+	}
+	lng, err := strconv.ParseFloat(lngDeg, 64)
+	if err != nil {
+		return nil, errors.New("parse float")
+	}
+	return &PointPlanet{lat: toRadian(Degree(lat)), lng: toRadian(Degree(lng))}, nil
+}
+
 func toRadian(value Degree) Radian {
-	return Radian(value * oneRadian)
+	return Radian(value * degToRad)
 }
 
 func (p PointPlanet) Lat() Radian {
@@ -33,6 +50,14 @@ func (p PointPlanet) Lat() Radian {
 
 func (p PointPlanet) Lng() Radian {
 	return p.lng
+}
+
+func (p PointPlanet) LatDeg() Degree {
+	return Degree(p.lat * radToDeg)
+}
+
+func (p PointPlanet) LngDeg() Degree {
+	return Degree(p.lng * radToDeg)
 }
 
 func deltaLng(p1 PointPlanet, p2 PointPlanet) Radian {

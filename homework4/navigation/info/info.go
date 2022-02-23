@@ -9,6 +9,7 @@ type Geocoding interface {
 
 type GeocodeData struct {
 	Point   maps.PointPlanet
-	Address string
-	Postal  string
+	City    string
+	Postal  string `json:"postal"`
+	Country string `json:"country"`
 }
