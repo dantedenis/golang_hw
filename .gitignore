@@ -1,0 +1,13 @@
+lesson1/.idea
+*.out
+*.exe
+/homework1/lesson1
+/homework1/test
+/homework1/.idea/*
+/homework2/.idea/*
+/homework2/homework2
+/homework2/.idea/
+/homework3/.idea/homework3.iml
+/homework3/.idea/modules.xml
+/homework4/.idea/homework4.iml
+/homework4/.idea/modules.xml

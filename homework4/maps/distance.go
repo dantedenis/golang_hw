@@ -1,13 +1,3 @@
-/*
-
-func (a Arc) AddPoint(points Arc) (*ArcSlice){
-    var result ArcSlice
-    result.arcs = make([]Arc, 0, 10)
-    result.arcs = append(result.arcs, a)
-    return &result
-}*/
-
-
 package maps
 
 type Arc struct {
@@ -29,19 +19,23 @@ func (a Arc) Distance() float64 {
 	return a.long
 }
 
-func (a Arc) AddPoint(points ...PointPlanet) (result *ArcSlice) {
+func (a ArcSlice) GetArcs() []Arc {
+	return a.arcs
+}
+
+func (a Arc) AddPoint(points ...PointPlanet) *ArcSlice {
+	var result ArcSlice
 	result.arcs = append(result.arcs, a)
 	for _, point := range points {
 		indexLast := len(result.arcs) - 1
 		result.arcs = append(result.arcs, *NewArc(result.arcs[indexLast].end, point))
 	}
-	return
+	return &result
 }
 
-func (aSlice *ArcSlice) AddPointSlice(points ...PointPlanet) *ArcSlice {
+func (a *ArcSlice) AddPointSlice(points ...PointPlanet) {
 	for _, point := range points {
-		indexLast := len(aSlice.arcs) - 1
-		aSlice.arcs = append(aSlice.arcs, *NewArc(aSlice.arcs[indexLast].end, point))
+		indexLast := len(a.arcs) - 1
+		a.arcs = append(a.arcs, *NewArc(a.arcs[indexLast].end, point))
 	}
-	return aSlice
 }
