@@ -12,7 +12,7 @@ type AllPath interface {
 }
 
 type Navigation struct {
-	geocoder geocoder.Geocoder
+	geocoder geocoder.Geocoding
 }
 
 type PathInfo struct {
@@ -28,7 +28,7 @@ func (p PathInfo) PlaceFinish() info.GeocodeData {
 	return p.pFinish
 }
 
-func NewNav(geocoder geocoder.Geocoder) *Navigation {
+func NewNav(geocoder geocoder.Geocoding) *Navigation {
 	return &Navigation{geocoder: geocoder}
 }
 func (n Navigation) PathInfo(p1, p2 maps.PointPlanet) (info PathInfo, err error) {
