@@ -15,7 +15,7 @@ import (
 const separator = ">>>>>>>>>>sign<<<<<<<<<<"
 
 type SignatureSha256 struct {
-	data      time.Time
+	date      time.Time
 	name      string
 	size      string
 	signature []byte
@@ -36,7 +36,7 @@ func NewSignatureSha256FromFile(file *os.File, hashString string) (sign Signatur
 		return
 	}
 	sign.size = strconv.FormatInt(stat.Size(), 10)
-	sign.data = stat.ModTime()
+	sign.date = stat.ModTime()
 	sign.name = path.Base(file.Name())
 	fileData := make([]byte, stat.Size())
 	countBytes, err := file.Read(fileData)
@@ -55,11 +55,11 @@ func NewSignatureSha256FromFile(file *os.File, hashString string) (sign Signatur
 }
 
 func New(date time.Time, name string, size string, sign []byte) *SignatureSha256 {
-	return &SignatureSha256{data: date, name: name, size: size, signature: sign}
+	return &SignatureSha256{date: date, name: name, size: size, signature: sign}
 }
 
-func NewSignatureSha256(date time.Time, size string, name string, signature []byte) *SignatureSha256 {
-	return &SignatureSha256{data: date, size: size, name: name, signature: signature}
+func NewSignatureSha256(sigSha contract.Sugnature) *SignatureSha256 {
+	return &SignatureSha256{date: sigSha.Date(), size: sigSha.Size(), name: sigSha.Name(), signature: sigSha.SignatureBytes()}
 }
 
 func (sig SignatureSha256) headerString() string {
@@ -74,7 +74,7 @@ func (sig SignatureSha256) SignatureBytes() []byte {
 }
 
 func (sig SignatureSha256) Date() time.Time {
-	return sig.data
+	return sig.date
 }
 
 func (sig SignatureSha256) Size() string {
