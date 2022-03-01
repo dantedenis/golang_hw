@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"errors"
-	"homework5/crypto"
+	"homework5/sign/contract"
 	"os"
 	"path"
 	"strconv"
@@ -58,17 +58,17 @@ func New(date time.Time, name string, size string, sign []byte) *SignatureSha256
 	return &SignatureSha256{date: date, name: name, size: size, signature: sign}
 }
 
-func NewSignatureSha256(sigSha contract.Sugnature) *SignatureSha256 {
+func NewSignatureSha256(sigSha contract.Signature) *SignatureSha256 {
 	return &SignatureSha256{date: sigSha.Date(), size: sigSha.Size(), name: sigSha.Name(), signature: sigSha.SignatureBytes()}
 }
 
 func (sig SignatureSha256) headerString() string {
-	return strings.Join([]string{sig.Date().Format("2006-01-02 15-04-05"), sig.size, sig.name}, ":")
+	return strings.Join([]string{sig.Date().Format("2006-01-02 15-04-05"), sig.size, sig.name, separator}, ":")
 }
 
 func (sig SignatureSha256) SignatureBytes() []byte {
 	result := bytes.NewBufferString(sig.headerString())
-	result.WriteString(separator)
+	result.WriteString(":")
 	result.Write(sig.signature)
 	return result.Bytes()
 }
@@ -83,6 +83,27 @@ func (sig SignatureSha256) Size() string {
 
 func (sig SignatureSha256) Name() string {
 	return sig.name
+}
+
+func different(a, b []byte) error {
+	signFirst, signSecond := strings.Split(string(a), ":"), strings.Split(string(b), ":")
+	var result string
+	if signFirst[0] != signSecond[0] {
+		result += "date is modify\n"
+	}
+	if signFirst[1] != signSecond[1] {
+		result += "size is modify\n"
+	}
+	if signFirst[2] != signSecond[2] {
+		result += "name is modify\n"
+	}
+	if signFirst[3] != signSecond[3] {
+		result += "header is modify\n"
+	}
+	if signFirst[4] != signSecond[4] {
+		result += "data file is modify\n"
+	}
+	return errors.New(result)
 }
 
 func (sig SignatureSha256) Equal(s string) (bool, error) {
@@ -111,6 +132,6 @@ func (sig SignatureSha256) Equal(s string) (bool, error) {
 	if bytes.Equal(sig.SignatureBytes(), fileData) == true {
 		return true, nil
 	} else {
-		return false, crypto.Different(sig.SignatureBytes(), fileData)
+		return false, different(sig.SignatureBytes(), fileData)
 	}
 }

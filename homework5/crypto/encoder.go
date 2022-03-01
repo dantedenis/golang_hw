@@ -1,12 +1,10 @@
 package crypto
 
 import (
-	"errors"
 	"homework5/sign"
 	"homework5/sign/contract"
 	"io/ioutil"
 	"os"
-	"strings"
 )
 
 type Encoder struct {
@@ -49,25 +47,4 @@ func (enc Encoder) SaveToFile(path string) error {
 
 func (enc Encoder) GetSign() contract.Signature {
 	return enc.signature
-}
-
-func Different(a, b []byte) error {
-	signFirst, signSecond := strings.Split(string(a), ":"), strings.Split(string(b), ":")
-	var result string
-	if signFirst[0] != signSecond[0] {
-		result += "date is modify\n"
-	}
-	if signFirst[1] != signSecond[1] {
-		result += "size is modify\n"
-	}
-	if signFirst[2] != signSecond[2] {
-		result += "name is modify\n"
-	}
-	if signFirst[3] != signSecond[3] {
-		result += "header is modify\n"
-	}
-	if signFirst[4] != signSecond[4] {
-		result += "data file is modify\n"
-	}
-	return errors.New(result)
 }
