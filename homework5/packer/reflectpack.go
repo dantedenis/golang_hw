@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"reflect"
 )
 
@@ -25,7 +26,20 @@ func Pack(sig interface{}) (buf *bytes.Buffer, err error) {
 				return
 			}
 		case reflect.String:
-
+			s := v.Field(i).String()
+			b := []byte(s)
+			err = binary.Write(buff, orderByte, uint16(len(b)))
+			if err != nil {
+				return
+			}
+			err = binary.Write(buff, orderByte, b)
+		case reflect.Slice:
+			err = binary.Write(buff, orderByte, uint16(len(v.Field(i).Bytes())))
+			err = binary.Write(buff, orderByte, v.Field(i).Bytes())
+		default:
+			fmt.Printf("undefined type field %v\n", v.Field(i).Type().Kind())
 		}
 	}
+	buf = buff
+	return
 }

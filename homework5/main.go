@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"homework5/crypto"
+	"homework5/packer"
 	"log"
 )
 
@@ -26,6 +27,9 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		sign := encoder.GetSign()
+		buf, err := packer.Pack(sign)
+		fmt.Println("bytes: ", buf.Bytes())
 		err = encoder.SaveToFile(outFile)
 		if err != nil {
 			panic(err)
