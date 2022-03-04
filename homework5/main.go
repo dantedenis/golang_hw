@@ -6,6 +6,7 @@ import (
 	"homework5/crypto"
 	"homework5/packer"
 	"log"
+	"time"
 )
 
 func main() {
@@ -27,8 +28,8 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		sign := encoder.GetSign()
-		buf, err := packer.Pack(sign)
+		//sign := encoder.GetSign()
+		buf, err := packer.Pack(struct{ num time.Time }{time.Now()})
 		fmt.Println("bytes: ", buf.Bytes())
 		err = encoder.SaveToFile(outFile)
 		if err != nil {
