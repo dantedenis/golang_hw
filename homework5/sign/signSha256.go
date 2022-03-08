@@ -14,11 +14,26 @@ import (
 
 const separator = ">>>>>>>>>>sign<<<<<<<<<<"
 
+// File Signature
+// cgen: binpack
 type SignatureSha256 struct {
-	date      time.Time
+	date      time.Time `cgen:"-"`
 	name      string
 	size      string
 	signature []byte
+}
+
+//adadadada
+type test struct {
+	_      int64
+	_      string
+	adasda []byte
+}
+
+type test2 struct {
+	_      int64
+	_      string
+	adasda []byte
 }
 
 func (sig SignatureSha256) encrypt(text string) (b []byte, err error) {
