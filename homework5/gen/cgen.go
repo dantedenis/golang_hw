@@ -31,6 +31,14 @@ var (
 	binary.Read(r, binary.BigEndian, &{{.FieldName}}Raw)
 	in.{{.FieldName}} = string({{.FieldName}}Raw)
 `))
+	slByteTpl = template.Must(template.New("slByteTpl").Parse(`
+	// {{.FieldName}}
+	var {{.FieldName}}LenRaw uint8
+	binary.Read(r, binary.BigEndian, &{{.FieldName}}LenRaw)
+	{{.FieldName}}Raw := make([]byte, {{.FieldName}}LenRaw)
+	binary.Read(r, binary.BigEndian, &{{.FieldName}}Raw)
+	in.{{.FieldName}} = {{.FieldName}}Raw
+`))
 )
 
 func main() {
@@ -118,7 +126,10 @@ func main() {
 					intTpl.Execute(out, tpl{fieldName})
 				case "string":
 					strTpl.Execute(out, tpl{fieldName})
+				case "[]":
+					slByteTpl.Execute(out, tpl{fieldName})
 				}
+
 			}
 
 			fmt.Fprintln(out, "\treturn nil")

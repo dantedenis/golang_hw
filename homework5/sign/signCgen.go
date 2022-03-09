@@ -19,5 +19,12 @@ func (in *SignatureSha256) Unpack(data []byte) error {
 	sizeRaw := make([]byte, sizeLenRaw)
 	binary.Read(r, binary.BigEndian, &sizeRaw)
 	in.size = string(sizeRaw)
+
+	// signature
+	var signatureLenRaw uint8
+	binary.Read(r, binary.BigEndian, &signatureLenRaw)
+	signatureRaw := make([]byte, signatureLenRaw)
+	binary.Read(r, binary.BigEndian, &signatureRaw)
+	in.signature = signatureRaw
 	return nil
 }
