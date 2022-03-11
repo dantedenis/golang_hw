@@ -15,6 +15,9 @@ func main() {
     for i := range ch {
         fmt.Println(i)
     }
+    //for i := 0; i < 5; i++ {  ----->>> not deadlock
+     //   fmt.Println(<-ch)
+    //}
     wg.Wait()
 }
 
